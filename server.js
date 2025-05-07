@@ -1,11 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
+const path = require("path");
 const csv = require("csv-parser");
 const { exec } = require("child_process");
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -16,7 +17,7 @@ app.use(express.json());
  */
 app.get("/api/opportunities", (req, res) => {
   const results = [];
-  const csvPath = "./logs/opportunities.csv";
+  const csvPath = path.join(__dirname, "logs", "opportunities.csv");
 
   if (!fs.existsSync(csvPath)) {
     return res.json([]); // Si le fichier n'existe pas encore
@@ -57,5 +58,5 @@ app.post("/api/trigger", (req, res) => {
  * Lancement du serveur
  */
 app.listen(PORT, () => {
-  console.log(`📡 API FlashBot MEV en ligne : http://localhost:${PORT}`);
+  console.log(`📡 API FlashBot MEV en ligne sur le port : ${PORT}`);
 });
